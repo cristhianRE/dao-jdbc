@@ -1,7 +1,6 @@
 package model.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -90,8 +89,11 @@ public class SellerDaoJDBC implements SellerDao {
 		try {
 			st = conn.prepareStatement(
 					"DELETE FROM seller  WHERE Id = ?");
+			
 			st.setInt(1, id);
+			
 			st.executeUpdate();
+			
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
@@ -103,6 +105,7 @@ public class SellerDaoJDBC implements SellerDao {
 	public Seller findById(Integer id) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName "
@@ -110,7 +113,9 @@ public class SellerDaoJDBC implements SellerDao {
 					+" ON seller.DepartmentId = department.Id "
 					+" WHERE seller.Id = ?");
 			st.setInt(1, id);
+			
 			rs = st.executeQuery();
+			
 			if (rs.next()) {
 				Department dep = instantiateDepartemnt(rs);
 				Seller obj = instantiateSeller(rs, dep);
@@ -118,6 +123,7 @@ public class SellerDaoJDBC implements SellerDao {
 			}else {
 				return null;
 			}
+			
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
